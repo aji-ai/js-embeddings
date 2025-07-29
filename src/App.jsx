@@ -810,7 +810,7 @@ Political concerns grow over economic policies and market fears`);
         <section className="section">
           <h2>🧑‍🍳 Embedding Models Are Like Flour To Your AI Dough</h2>
           <p className="section-description">
-            Little kitchen demo of what sits at the heart of your RAG pipeline.
+            Mind the flour of your RAG pipeline.
           </p>
           
           <div className="controls">
@@ -986,7 +986,7 @@ Political concerns grow over economic policies and market fears`);
       </main>
       
       <footer className="app-footer">
-        <p>A Cozy AI Kitchen 🍰 Recipe</p>
+        <p>A Cozy AI Kitchen 🍰 Recipe [Inspired by <a href="https://medium.com/@arundona/open-ai-3rd-gen-embedding-models-whats-driving-the-improvements-4c23b88751f1">this Medium article</a>]</p>
       </footer>
     </div>
   )
