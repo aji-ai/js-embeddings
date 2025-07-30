@@ -133,6 +133,184 @@ app.post('/api/similarity', async (req, res) => {
   }
 });
 
+// API endpoint for text completion (for scissors demo)
+app.post('/api/complete', async (req, res) => {
+  try {
+    const { prompt, context, model = 'gpt-4o-mini' } = req.body;
+    
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ 
+        error: 'Prompt is required and must be a string' 
+      });
+    }
+    
+    let systemMessage = "You are a helpful assistant. Complete the given sentence or prompt in a natural and contextually appropriate way.";
+    let userMessage = prompt;
+    
+    // If context is provided, include it in the prompt
+    if (context && typeof context === 'string' && context.trim()) {
+      systemMessage = "You are a helpful assistant. Use the provided context to complete the given sentence or prompt in a natural and contextually appropriate way.";
+      userMessage = `Context:\n${context}\n\nComplete this sentence: ${prompt}`;
+    }
+    
+    const response = await openai.chat.completions.create({
+      model: model,
+      messages: [
+        { role: "system", content: systemMessage },
+        { role: "user", content: userMessage }
+      ],
+      max_tokens: 150,
+      temperature: 0.7,
+    });
+    
+    const completion = response.choices[0].message.content.trim();
+    
+    res.json({
+      completion: completion,
+      hasContext: !!context,
+      model: model
+    });
+    
+  } catch (error) {
+    console.error('Error generating completion:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate completion',
+      details: error.message 
+    });
+  }
+});
+
+// API endpoint for RAG (Retrieval-Augmented Generation)
+app.post('/api/rag', async (req, res) => {
+  try {
+    const { query, context, model = 'gpt-4o-mini' } = req.body;
+    
+    if (!query || typeof query !== 'string') {
+      return res.status(400).json({ 
+        error: 'Query is required and must be a string' 
+      });
+    }
+    
+    if (!context || typeof context !== 'string') {
+      return res.status(400).json({ 
+        error: 'Context is required and must be a string' 
+      });
+    }
+    
+    const systemMessage = "You are a helpful assistant. Answer the user's question based on the provided context. Use the information available to provide a useful answer, even if you need to infer from related concepts. If you cannot provide any relevant answer from the context, then say so. Do not use external knowledge beyond what's in the context.";
+    const userMessage = `Context:\n${context}\n\nQuestion: ${query}`;
+    
+    const response = await openai.chat.completions.create({
+      model: model,
+      messages: [
+        { role: "system", content: systemMessage },
+        { role: "user", content: userMessage }
+      ],
+      max_tokens: 200,
+      temperature: 0.3, // Lower temperature for more focused answers
+    });
+    
+    const answer = response.choices[0].message.content.trim();
+    
+    res.json({
+      answer: answer,
+      query: query,
+      model: model
+    });
+    
+  } catch (error) {
+    console.error('Error generating RAG response:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate RAG response',
+      details: error.message 
+    });
+  }
+});
+
+// API endpoint for structured data extraction (for context slingshot demo)
+app.post('/api/extract-structured', async (req, res) => {
+  try {
+    const { text, prompt, format = 'structured', model = 'gpt-4o-mini' } = req.body;
+    
+    if (!text || typeof text !== 'string') {
+      return res.status(400).json({ 
+        error: 'Text is required and must be a string' 
+      });
+    }
+    
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ 
+        error: 'Prompt is required and must be a string' 
+      });
+    }
+    
+    let systemMessage, userMessage;
+    
+    if (format === 'json') {
+      systemMessage = `You are a data extraction expert. Extract the requested information from the provided text and return it as valid JSON. Be thorough and accurate. Return only the JSON object, no additional text or explanation.`;
+      userMessage = `Extract the following information from this text: ${prompt}
+
+Text to analyze:
+${text}
+
+Return the extracted information as a well-structured JSON object with appropriate field names and data types.`;
+    } else if (format === 'executable') {
+      systemMessage = `You are a code generation expert. Based on the extracted information, generate actual executable code such as SQL queries, API calls, function invocations, or other programming commands that would use this data. Be practical and realistic.`;
+      userMessage = `Based on this request: ${prompt}
+
+Text to analyze:
+${text}
+
+Generate actual executable code that would accomplish the task described. This could be SQL queries, JavaScript function calls, API requests, or other programming commands. Include comments and make it production-ready.`;
+    } else {
+      systemMessage = `You are a data extraction expert. Extract the requested information from the provided text and present it in a clear, organized, human-readable format. Be thorough and accurate.`;
+      userMessage = `Extract the following information from this text: ${prompt}
+
+Text to analyze:
+${text}
+
+Present the extracted information in a clear, organized format that would be easy for humans to read and understand.`;
+    }
+    
+    const response = await openai.chat.completions.create({
+      model: model,
+      messages: [
+        { role: "system", content: systemMessage },
+        { role: "user", content: userMessage }
+      ],
+      max_tokens: 1000,
+      temperature: 0.3, // Lower temperature for more consistent extraction
+    });
+    
+    let extraction = response.choices[0].message.content.trim();
+    
+    // If JSON format requested, try to parse and reformat
+    if (format === 'json') {
+      try {
+        const parsedJson = JSON.parse(extraction);
+        extraction = JSON.stringify(parsedJson, null, 2);
+      } catch (parseError) {
+        console.log('JSON parsing failed, returning raw response');
+        // If parsing fails, return the raw response
+      }
+    }
+    
+    res.json({
+      extraction: extraction,
+      format: format,
+      model: model,
+      originalPrompt: prompt
+    });
+    
+  } catch (error) {
+    console.error('Error extracting structured data:', error);
+    res.status(500).json({ 
+      error: 'Failed to extract structured data',
+      details: error.message 
+    });
+  }
+});
+
 // Helper function for cosine similarity
 function cosineSimilarity(a, b) {
   let dotProduct = 0;
