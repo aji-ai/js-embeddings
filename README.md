@@ -1,6 +1,6 @@
 # 🧑‍🍳 A Cozy AI Kitchenette
 
-A modern React application that explores AI concepts through interactive cooking demonstrations. Features hands-on recipes for embeddings, RAG, text completion, and structured data extraction. Built with Vite, React, and P5.js with support for both OpenAI and Azure OpenAI.
+A little app that started off as a way to teach embeddings and then it became a lot of other things all at once.
 
 ## 🛠️ Getting Started
 
