@@ -9,6 +9,12 @@ function HomeDemo() {
           A cozy place to explore AI concepts through interactive cooking demonstrations.
         </p>
         
+        <div className="repo-link" style={{ textAlign: 'center', margin: '20px 0' }}>
+          <p>
+            🔗 <strong>Explore the code:</strong> <a href="https://github.com/aji-ai/js-embeddings" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b35', textDecoration: 'none', fontWeight: 'bold' }}>github.com/aji-ai/js-embeddings</a>
+          </p>
+        </div>
+        
         <div className="welcome-video">
           <video 
             controls 
