@@ -155,12 +155,12 @@ Alex`,
         <div className="slingshot-explanation">
           <div className="transformation-flow">
             <div className="flow-step unstructured">
-              <h3>📝 Unstructured Text</h3>
+              <h3>🫠 Unstructured Text</h3>
               <p>Messy, human-written content with information scattered throughout</p>
             </div>
             <div className="slingshot-arrow">🧽</div>
             <div className="flow-step structured">
-              <h3>📊 Structured Data</h3>
+              <h3>👔 Structured Data</h3>
               <p>Organized, machine-readable format ready for systems integration</p>
             </div>
           </div>

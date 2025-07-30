@@ -4,17 +4,18 @@ function HomeDemo() {
   return (
     <div className="home-demo">
       <section className="section">
-        <h2>🍳 Welcome to the AI Kitchen</h2>
+        <h2>🍳 Welcome to the Cozy AI Kitchenette</h2>
         <p className="section-description">
           A cozy place to explore AI concepts through interactive cooking demonstrations.
         </p>
         
         <div className="repo-link" style={{ textAlign: 'center', margin: '20px 0' }}>
-          <p>
+          <p style={{ marginBottom: '1rem' }}>
             🔗 <strong>Explore the code:</strong> <a href="https://github.com/aji-ai/js-embeddings" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b35', textDecoration: 'none', fontWeight: 'bold' }}>github.com/aji-ai/js-embeddings</a>
           </p>
+          <p><img src="/design-co-code.png" alt="Design Co" style={{ width: '400px', maxWidth: '400px', borderRadius: '8px', marginBottom: '16px' }} /></p>
         </div>
-        
+        <h3>The Cozy AI Kitchen via YouTube</h3>
         <div className="welcome-video">
           <video 
             controls 
@@ -26,8 +27,9 @@ function HomeDemo() {
             Your browser does not support the video tag.
           </video>
         </div>
-        
+        <h3 style={{ marginBottom: '2rem' }}>Context For These Recipes ...</h3>
         <div className="image-sequence">
+          <p style={{ textAlign: 'center', marginBottom: '1rem' }}>Harvard Coop Shopping Trip, July 15, 2025</p>
           <img src="/p00.JPG" alt="Image 00" style={{ width: '100%', maxWidth: '800px', borderRadius: '8px', marginBottom: '16px' }} />
           <img src="/p01.JPG" alt="Image 01" style={{ width: '100%', maxWidth: '800px', borderRadius: '8px', marginBottom: '16px' }} />
           <img src="/p02.JPG" alt="Image 02" style={{ width: '100%', maxWidth: '800px', borderRadius: '8px', marginBottom: '16px' }} />

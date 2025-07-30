@@ -157,7 +157,7 @@ function ScissorsDemo() {
 
         <div className="simon-quote">
           <blockquote>
-            "Human rational behavior is shaped by a scissors whose two blades are the structure of task environments and the computational capabilities of the actor."
+            "Human rational behavior is shaped by a ✂️ scissors<br /> whose two blades are the structure of <br />1️⃣ 🌎 <span style={{ color: '#00ff00' }}>task environments</span> and the <br />2️⃣ 🧠 <span style={{ color: '#00aaff' }}>computational capabilities</span> of the actor."
           </blockquote>
           <cite>— Herbert Simon</cite>
         </div>
@@ -165,13 +165,13 @@ function ScissorsDemo() {
         <div className="scissors-explanation">
           <div className="blade-explanation">
             <div className="blade cognition-blade">
-              <h3>🧠 Cognition Blade</h3>
-              <p>The model's computational capabilities - what it can do with the information it receives.</p>
+              <h3>🌍 Context Blade</h3>
+              <p>The structure of the environment - relevant information from past conversations.</p>
             </div>
             <div className="scissors-symbol">✂️</div>
             <div className="blade context-blade">
-              <h3>🌍 Context Blade</h3>
-              <p>The structure of the environment - relevant information from past conversations.</p>
+              <h3>🧠 Cognition Blade</h3>
+              <p>The model's computational capabilities - what it can do with the information it receives.</p>
             </div>
           </div>
         </div>

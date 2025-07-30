@@ -1278,15 +1278,21 @@ function KnowledgeUnderstandingDemo() {
   }, []);
 
   return (
-    <div className="demo-placeholder">
-      <div className="einstein-quote">
-        <blockquote>
-          "Any fool can know. The point is to understand."
-        </blockquote>
-        <cite>— Albert Einstein</cite>
-      </div>
+    <div className="knowledge-understanding-demo">
+      <section className="section">
+        <h2>🤔 Knowledge vs Understanding</h2>
+        <p className="section-description">
+          Comparing conventional RAG with graph-based knowledge extraction to explore how understanding differs from mere knowledge retrieval.
+        </p>
 
-      <div className="knowledge-graph-container">
+        <div className="einstein-quote">
+          <blockquote>
+            "Any fool can know. The point is to understand."
+          </blockquote>
+          <cite>— Albert Einstein</cite>
+        </div>
+
+        <div className="knowledge-graph-container">
         <div className="scenario-header">
           <div className="scenario-selector">
             <label htmlFor="scenario-select">Example: </label>
@@ -1387,7 +1393,8 @@ function KnowledgeUnderstandingDemo() {
         </div>
         
         <div ref={canvasRef} className="knowledge-canvas"></div>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

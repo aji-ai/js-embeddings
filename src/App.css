@@ -28,10 +28,20 @@
 
 .app-bar-title h1 {
   font-size: 1.5rem;
-  font-weight: 300;
+  font-weight: 600;
   margin: 0;
   color: white;
   letter-spacing: -0.02em;
+}
+
+.title-link {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.title-link:hover {
+  opacity: 0.8;
 }
 
 .app-bar-nav {
@@ -647,7 +657,6 @@
   padding: 2rem;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
-  border-left: 4px solid #4CAF50;
   text-align: center;
 }
 
@@ -674,7 +683,6 @@
   padding: 2rem;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
-  border-left: 4px solid #FF9800;
   text-align: center;
 }
 
@@ -1539,11 +1547,11 @@
 }
 
 .flow-step.unstructured {
-  border-left: 3px solid #FF9800;
+  border-left: 3px solid #696969;
 }
 
 .flow-step.structured {
-  border-left: 3px solid #4CAF50;
+  border-left: 3px solid #f7f319;
 }
 
 .flow-step h3 {

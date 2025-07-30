@@ -2,6 +2,10 @@
 
 A little app that started off as a way to teach embeddings and then it became a lot of other things all at once.
 
+## 💁 About @johnmaeda
+
+![design.co](public/design-co.png)
+
 ## 🛠️ Getting Started
 
 ### Prerequisites

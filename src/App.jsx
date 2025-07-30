@@ -46,7 +46,9 @@ function AppBar() {
     <nav className="app-bar">
       <div className="app-bar-content">
         <div className="app-bar-title">
-          <h1>🍰 Cozy AI Kitchenette (CAIK)</h1>
+          <Link to="/" className="title-link">
+            <h1>🍰 Cozy AI Kitchenette (CAIK)</h1>
+          </Link>
         </div>
         <div className="app-bar-nav">
           {navItems.map((item) => (
