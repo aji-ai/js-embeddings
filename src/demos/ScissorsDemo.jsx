@@ -189,7 +189,7 @@ function ScissorsDemo() {
           </div>
 
           <button onClick={completeWithoutContext} className="action-button">
-            Complete the Sentence
+            Use Just The 🧠 Cognition Blade
           </button>
 
           {hasCompletedWithoutContext && (
@@ -239,7 +239,7 @@ function ScissorsDemo() {
 
         {hasCompletedWithoutContext && (
           <button onClick={demonstrateScissors} className="action-button scissors-compare">
-            Snip, Snip, Snip!
+            Use Both Blades: 🌍 Context + 🧠 Cognition
           </button>
         )}
 

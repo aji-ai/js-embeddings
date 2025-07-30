@@ -1,18 +1,6 @@
-# 🧑‍🍳 JS Embeddings - A Cozy AI Kitchen Recipe
+# 🧑‍🍳 A Cozy AI Kitchenette
 
-A modern React application that visualizes and compares OpenAI embedding models with interactive word relationship visualization and similarity search capabilities. Built with Vite, React, and P5.js for beautiful, responsive visualizations.
-
-## 🚀 Features
-
-- ⚡ **Lightning Fast Hot Reload** - See changes instantly as you edit
-- 🎨 **Modern React** - Built with React 18 and hooks
-- 📦 **Vite Build Tooling** - Ultra-fast development server and optimized builds
-- 🤖 **OpenAI Integration** - Compare text-embedding-ada-002 and text-embedding-3-small models
-- 📊 **Interactive Visualizations** - P5.js powered 2D embedding space visualization with perspective effects
-- 🔍 **Similarity Search** - Compare search results across different embedding models
-- 🎯 **ESLint Configuration** - Code quality and consistency
-- 📱 **Responsive Design** - Beautiful minimalist UI that works on all devices
-- 🌈 **Modern Styling** - Muted dark theme with clean typography
+A modern React application that explores AI concepts through interactive cooking demonstrations. Features hands-on recipes for embeddings, RAG, text completion, and structured data extraction. Built with Vite, React, and P5.js with support for both OpenAI and Azure OpenAI.
 
 ## 🛠️ Getting Started
 
@@ -20,7 +8,7 @@ A modern React application that visualizes and compares OpenAI embedding models 
 
 - Node.js (version 16 or higher)
 - npm or yarn
-- OpenAI API key
+- OpenAI API key OR Azure OpenAI resource (with appropriate model deployments)
 
 ### Installation
 
@@ -30,6 +18,8 @@ npm install
 ```
 
 2. **Set up your OpenAI API key:**
+
+**For standard OpenAI:**
 ```bash
 # On macOS/Linux:
 export OPENAI_API_KEY="your-openai-api-key-here"
@@ -39,6 +29,27 @@ set OPENAI_API_KEY=your-openai-api-key-here
 
 # On Windows (PowerShell):
 $env:OPENAI_API_KEY="your-openai-api-key-here"
+```
+
+**For Azure OpenAI (optional):**
+```bash
+# On macOS/Linux:
+export USE_AZURE_OPENAI="true"
+export AZURE_OPENAI_API_KEY="your-azure-api-key-here"
+export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com"
+export AZURE_OPENAI_API_VERSION="2024-10-21"  # or "2025-01-01-preview" for preview features
+
+# On Windows (Command Prompt):
+set USE_AZURE_OPENAI=true
+set AZURE_OPENAI_API_KEY=your-azure-api-key-here
+set AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+set AZURE_OPENAI_API_VERSION=2024-10-21
+
+# On Windows (PowerShell):
+$env:USE_AZURE_OPENAI="true"
+$env:AZURE_OPENAI_API_KEY="your-azure-api-key-here"
+$env:AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com"
+$env:AZURE_OPENAI_API_VERSION="2024-10-21"
 ```
 
 3. **Start the development environment:**
@@ -82,38 +93,57 @@ $env:OPENAI_API_KEY="your-openai-api-key-here"
 
 ## 🎯 How to Use
 
-### Word Relationship Visualization
+### 🏠 Home - AI Kitchen Welcome
+Start here to see an overview of all available AI recipes and demonstrations.
 
-1. **Enter words** separated by commas in the "Enter words to visualize" field (e.g., "Ireland, Irish, O'Connor, Dublin")
+### 🧑‍🍳 Embeddings - "Spin the Centrifuge!" & "Search the Cupboards!"
+
+**Word Relationship Visualization:**
+1. **Enter words** separated by commas (e.g., "Ireland, Irish, O'Connor, Dublin")
 2. **Click "Visualize Word Relationships"** to generate embeddings
-3. **View the results**:
-   - Model performance comparison
-   - Raw embedding vectors (1536 numbers per word)
-   - 2D PCA visualization with perspective effects
-   - Word relationship calculations with similarity scores
+3. **View results**: Model comparison, raw vectors, 2D PCA visualization, similarity scores
 
-### Similarity Search
-
-1. **Enter a search query** (e.g., "economic pressure concerns")
+**Similarity Search:**
+1. **Enter a search query** (e.g., "economic pressure concerns")  
 2. **Add documents** to search through (one per line)
-3. **Click "Compare Search Results"** to perform similarity search
-4. **View the results**:
-   - Ranked search results with similarity scores
-   - Document mapping (Doc 1, Doc 2, etc.)
-   - Query-document relationship visualization
-   - Model comparison for search accuracy
+3. **Click "Compare Search Results"** to see ranked results with similarity scores
+
+### ✂️ Scissors - Herbert Simon's Model
+Explore how context and cognition work together in AI completions:
+1. **Enter a prompt** to complete
+2. **Add context** (optional) to guide the completion
+3. **Compare results** with and without context to see the "scissors" effect
+
+### 🤔 Knowledge - RAG Comparison  
+Compare two approaches to knowledge retrieval:
+1. **"Watch a RAG Happen"** - See conventional chunking-based RAG in action
+2. **"Understanding > Knowledge"** - Experience graph-based knowledge extraction
+3. **Ask questions** about AI topics and compare the quality of responses
+
+### 🧽 Sponge - "Squeeze the Sponge"
+Transform unstructured text into structured data:
+1. **Enter unstructured text** (emails, documents, etc.)
+2. **Specify what to extract** (names, dates, actions, etc.)
+3. **Choose output format** (structured, JSON, or executable code)
+4. **Watch the transformation** from chaos to order
 
 ## 📁 Project Structure
 
 ```
 js-embeddings/
-├── server.js              # Express server with OpenAI API endpoints
+├── server.js              # Express server with OpenAI/Azure OpenAI API endpoints
 ├── src/                   # React application source
 │   ├── App.jsx           # Main application component
 │   ├── App.css           # Component styles
 │   ├── main.jsx          # Application entry point
-│   └── index.css         # Global styles
-├── public/               # Static assets
+│   ├── index.css         # Global styles
+│   └── demos/            # Interactive AI demonstration components
+│       ├── HomeDemo.jsx          # Welcome page with demo overview
+│       ├── EmbeddingsDemo.jsx    # Word relationship visualization
+│       ├── ScissorsDemo.jsx      # Context vs cognition in AI completions
+│       ├── KnowledgeUnderstandingDemo.jsx  # RAG comparison demo
+│       └── ContextSlingshotDemo.jsx       # Structured data extraction
+├── public/               # Static assets and demo images
 ├── dist/                 # Built files (generated)
 ├── index.html            # HTML template
 ├── vite.config.js        # Vite configuration with API proxy
@@ -125,13 +155,39 @@ js-embeddings/
 
 ### Environment Variables
 
+**Standard OpenAI:**
 - `OPENAI_API_KEY` - Your OpenAI API key (required)
+
+**Azure OpenAI (optional):**
+- `USE_AZURE_OPENAI` - Set to `true` to use Azure OpenAI instead of standard OpenAI (default: `false`)
+- `AZURE_OPENAI_API_KEY` - Your Azure OpenAI API key (required when using Azure)
+- `AZURE_OPENAI_ENDPOINT` - Your Azure OpenAI endpoint (e.g., `https://your-resource.openai.azure.com`)
+- `AZURE_OPENAI_API_VERSION` - Azure OpenAI API version (e.g., `2024-10-21` for stable or `2025-01-01-preview` for preview features)
+
+**Required Azure OpenAI Model Deployments:**
+When using Azure OpenAI, you must deploy the following models in your Azure OpenAI resource with **exact deployment names** matching the model names:
+
+1. **`text-embedding-ada-002`** - For legacy embedding comparisons
+2. **`text-embedding-3-small`** - For modern embedding generation
+3. **`gpt-4o-mini`** - For text completion, RAG, and structured data extraction
+
+⚠️ **Important**: 
+- The deployment names in Azure OpenAI Studio must exactly match the model names above
+- The application uses your specified `AZURE_OPENAI_API_VERSION` - both stable and preview versions are supported
+- All required models (embeddings and chat completions) work with modern Azure OpenAI API versions
+- The application creates separate client instances for each deployment using the official Azure OpenAI JavaScript library
+- Based on the [official Azure OpenAI JavaScript documentation](https://learn.microsoft.com/en-us/javascript/api/overview/azure/openai-readme?view=azure-node-latest) and [API reference](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference)
+
+**Server:**
 - `PORT` - Server port (default: 3000)
 
 ### API Endpoints
 
-- `POST /api/embeddings` - Get embeddings for multiple texts
-- `POST /api/similarity` - Perform similarity search
+- `POST /api/embeddings` - Get embeddings for multiple texts and models
+- `POST /api/similarity` - Perform similarity search between query and documents
+- `POST /api/complete` - Generate text completions (for Scissors demo)
+- `POST /api/rag` - Retrieval-Augmented Generation responses
+- `POST /api/extract-structured` - Extract structured data from unstructured text
 
 ### Models Supported
 

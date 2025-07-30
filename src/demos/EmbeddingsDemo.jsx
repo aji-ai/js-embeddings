@@ -824,7 +824,7 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
             />
           </div>
           <button onClick={visualizeWords} className="action-button">
-            Spin the Centrifuge!
+           Activate Centrifuge
           </button>
         </div>
 
@@ -955,7 +955,7 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
             />
           </div>
           <button onClick={performSimilaritySearch} className="action-button">
-            Search the Cupboards!
+            Search Cupboard Shelves
           </button>
         </div>
 

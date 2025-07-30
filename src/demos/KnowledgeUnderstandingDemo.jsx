@@ -150,11 +150,13 @@ function KnowledgeUnderstandingDemo() {
       const maxChunksSelect = document.getElementById('max-chunks');
       const queryInput = document.getElementById('rag-query');
       const scenarioSelect = document.getElementById('scenario-select');
+      const idkModeCheckbox = document.getElementById('idk-mode');
       
       const chunkSize = parseInt(chunkSizeSelect.value);
       const maxChunks = parseInt(maxChunksSelect.value);
       const query = queryInput.value.trim();
       const currentScenario = scenarioSelect.value;
+      const idkMode = idkModeCheckbox.checked;
 
       if (!query) {
         alert('Please enter a query');
@@ -218,7 +220,8 @@ function KnowledgeUnderstandingDemo() {
         body: JSON.stringify({
           query: query,
           context: context,
-          model: 'gpt-4o-mini'
+          model: 'gpt-4o-mini',
+          idkMode: idkMode
         })
       });
 
@@ -1297,7 +1300,7 @@ function KnowledgeUnderstandingDemo() {
         </div>
 
         <div className="rag-demo-section">
-          <h3>Conventional RAG Process</h3>
+          <h3>Conventional RAG Cooking</h3>
           <div className="rag-controls">
             <div className="rag-control-group">
               <label htmlFor="chunk-size">Chunk Size:</label>
@@ -1307,6 +1310,7 @@ function KnowledgeUnderstandingDemo() {
                 <option value="50">50 words</option>
                 <option value="75">75 words</option>
                 <option value="100">100 words</option>
+                <option value="500">500 words</option>
               </select>
             </div>
             <div className="rag-control-group">
@@ -1318,11 +1322,15 @@ function KnowledgeUnderstandingDemo() {
                 <option value="5">5 chunks</option>
               </select>
             </div>
-            <div className="rag-control-group">
+            <div className="rag-control-group rag-query-group">
               <label htmlFor="query-input">Query:</label>
               <input type="text" id="rag-query" placeholder="Ask a question about the text..." />
             </div>
-            <button id="run-rag" className="action-button">Watch a RAG Happen</button>
+            <div className="rag-control-group">
+              <label htmlFor="idk-mode">IDK Mode:</label>
+              <input type="checkbox" id="idk-mode" title="When checked, AI will say 'I don't know' when information is insufficient. When unchecked, AI will try to infer and provide helpful answers." />
+            </div>
+            <button id="run-rag" className="action-button">Build - A - RAG</button>
           </div>
 
           <div className="rag-steps">
@@ -1348,7 +1356,7 @@ function KnowledgeUnderstandingDemo() {
         </div>
 
         <div className="graph-rag-demo-section">
-          <h4>Graph RAG Process</h4>
+          <h4>Graph RAG Cooking</h4>
           
           <div className="graph-rag-controls">
             <button id="extract-graph" className="action-button">Understanding &gt; Knowledge</button>

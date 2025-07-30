@@ -1853,8 +1853,24 @@
   font-size: 0.9rem;
 }
 
-.rag-control-group input {
+.rag-control-group input[type="text"] {
   min-width: 300px;
+}
+
+.rag-control-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #ff6b35;
+  cursor: pointer;
+}
+
+.rag-query-group {
+  flex: 1;
+}
+
+.rag-query-group input {
+  width: 100%;
+  min-width: auto;
 }
 
 .rag-button {

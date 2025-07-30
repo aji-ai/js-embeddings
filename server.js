@@ -1,6 +1,6 @@
 // server.js - Node.js Express server with OpenAI integration
 import express from 'express';
-import OpenAI from 'openai';
+import OpenAI, { AzureOpenAI } from 'openai';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -11,10 +11,38 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY // Set your API key in environment variables
-});
+// Use latest stable API version for all models (per Azure OpenAI documentation)
+const AZURE_API_VERSION = '2024-10-21'; // Latest GA version from Microsoft docs
+
+// Initialize OpenAI clients
+const openai = process.env.USE_AZURE_OPENAI === 'true' 
+  ? null // We'll create Azure clients per request with correct API version
+  : new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY // Set your API key in environment variables
+    });
+
+// Create Azure OpenAI client for a specific deployment
+function createAzureOpenAIClient(model) {
+  if (process.env.USE_AZURE_OPENAI !== 'true') {
+    return openai;
+  }
+  
+  // Use the official AzureOpenAI constructor with deployment name
+  return new AzureOpenAI({
+    apiKey: process.env.AZURE_OPENAI_API_KEY,
+    endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+    deployment: model, // Use model name as deployment name
+    apiVersion: getApiVersion()
+  });
+}
+
+// Helper function to get the API version (same for all models)
+function getApiVersion() {
+  if (process.env.USE_AZURE_OPENAI === 'true') {
+    return process.env.AZURE_OPENAI_API_VERSION || AZURE_API_VERSION;
+  }
+  return undefined; // Standard OpenAI doesn't need API version
+}
 
 app.use(cors());
 app.use(express.json());
@@ -73,8 +101,15 @@ app.post('/api/embeddings', async (req, res) => {
     const results = {};
     
     for (const model of models) {
-      const response = await openai.embeddings.create({
-        model: model,
+      const client = createAzureOpenAIClient(model);
+      
+      // Debug: Log the API version being used
+      if (process.env.USE_AZURE_OPENAI === 'true') {
+        console.log(`🔧 Using API version ${getApiVersion()} for model ${model}`);
+      }
+      
+      const response = await client.embeddings.create({
+        model: process.env.USE_AZURE_OPENAI === 'true' ? "" : model, // Empty string for Azure OpenAI
         input: texts,
       });
       
@@ -84,9 +119,34 @@ app.post('/api/embeddings', async (req, res) => {
     res.json(results);
   } catch (error) {
     console.error('Error getting embeddings:', error);
+    
+    // Get models from request body for debugging (models variable is out of scope here)
+    const requestedModels = req.body.models || ['text-embedding-ada-002', 'text-embedding-3-small'];
+    
+    // Enhanced debugging for Azure OpenAI
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.error('=== AZURE OPENAI DEBUG INFO ===');
+      console.error('Requested models:', requestedModels);
+      console.error('API version:', getApiVersion());
+      console.error('Azure endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+      
+      if (error.status === 404) {
+        console.error('❌ DEPLOYMENT NOT FOUND!');
+        console.error('Expected deployment names to exist in Azure OpenAI Studio:');
+        requestedModels.forEach(model => {
+          console.error(`   - ${model}`);
+        });
+        console.error('Make sure deployment names in Azure match model names exactly!');
+      }
+      console.error('===============================');
+    }
+    
     res.status(500).json({ 
       error: 'Failed to get embeddings',
-      details: error.message 
+      details: error.message,
+      models: requestedModels,
+      isAzure: process.env.USE_AZURE_OPENAI === 'true'
     });
   }
 });
@@ -104,8 +164,15 @@ app.post('/api/similarity', async (req, res) => {
     
     // Get embeddings for query and documents
     const allTexts = [query, ...documents];
-    const response = await openai.embeddings.create({
-      model: model,
+    const client = createAzureOpenAIClient(model);
+    
+    // Debug: Log the API version being used
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.log(`🔧 Using API version ${getApiVersion()} for similarity model ${model}`);
+    }
+    
+    const response = await client.embeddings.create({
+      model: process.env.USE_AZURE_OPENAI === 'true' ? "" : model, // Empty string for Azure OpenAI
       input: allTexts,
     });
     
@@ -126,9 +193,31 @@ app.post('/api/similarity', async (req, res) => {
     res.json(similarities);
   } catch (error) {
     console.error('Error calculating similarity:', error);
+    
+    // Get model from request body for debugging (model variable is out of scope here)
+    const requestedModel = req.body.model || 'text-embedding-3-small';
+    
+    // Enhanced debugging for Azure OpenAI
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.error('=== AZURE OPENAI SIMILARITY DEBUG INFO ===');
+      console.error('Requested model:', requestedModel);
+      console.error('API version:', getApiVersion());
+      console.error('Azure endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+      
+      if (error.status === 404) {
+        console.error('❌ SIMILARITY DEPLOYMENT NOT FOUND!');
+        console.error(`Expected deployment name to exist in Azure OpenAI Studio: ${requestedModel}`);
+        console.error('Make sure deployment name in Azure matches model name exactly!');
+      }
+      console.error('==========================================');
+    }
+    
     res.status(500).json({ 
       error: 'Failed to calculate similarity',
-      details: error.message 
+      details: error.message,
+      model: requestedModel,
+      isAzure: process.env.USE_AZURE_OPENAI === 'true'
     });
   }
 });
@@ -153,8 +242,15 @@ app.post('/api/complete', async (req, res) => {
       userMessage = `Context:\n${context}\n\nComplete this sentence: ${prompt}`;
     }
     
-    const response = await openai.chat.completions.create({
-      model: model,
+    const client = createAzureOpenAIClient(model);
+    
+    // Debug: Log the API version being used
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.log(`🔧 Using API version ${getApiVersion()} for completion model ${model}`);
+    }
+    
+    const response = await client.chat.completions.create({
+      model: process.env.USE_AZURE_OPENAI === 'true' ? "" : model, // Empty string for Azure OpenAI
       messages: [
         { role: "system", content: systemMessage },
         { role: "user", content: userMessage }
@@ -173,9 +269,31 @@ app.post('/api/complete', async (req, res) => {
     
   } catch (error) {
     console.error('Error generating completion:', error);
+    
+    // Get model from request body for debugging (model variable is out of scope here)
+    const requestedModel = req.body.model || 'gpt-4o-mini';
+    
+    // Enhanced debugging for Azure OpenAI
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.error('=== AZURE OPENAI COMPLETION DEBUG INFO ===');
+      console.error('Requested model:', requestedModel);
+      console.error('API version:', getApiVersion());
+      console.error('Azure endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+      
+      if (error.status === 404) {
+        console.error('❌ COMPLETION DEPLOYMENT NOT FOUND!');
+        console.error(`Expected deployment name to exist in Azure OpenAI Studio: ${requestedModel}`);
+        console.error('Make sure deployment name in Azure matches model name exactly!');
+      }
+      console.error('===========================================');
+    }
+    
     res.status(500).json({ 
       error: 'Failed to generate completion',
-      details: error.message 
+      details: error.message,
+      model: requestedModel,
+      isAzure: process.env.USE_AZURE_OPENAI === 'true'
     });
   }
 });
@@ -183,7 +301,7 @@ app.post('/api/complete', async (req, res) => {
 // API endpoint for RAG (Retrieval-Augmented Generation)
 app.post('/api/rag', async (req, res) => {
   try {
-    const { query, context, model = 'gpt-4o-mini' } = req.body;
+    const { query, context, model = 'gpt-4o-mini', idkMode = false } = req.body;
     
     if (!query || typeof query !== 'string') {
       return res.status(400).json({ 
@@ -197,11 +315,21 @@ app.post('/api/rag', async (req, res) => {
       });
     }
     
-    const systemMessage = "You are a helpful assistant. Answer the user's question based on the provided context. Use the information available to provide a useful answer, even if you need to infer from related concepts. If you cannot provide any relevant answer from the context, then say so. Do not use external knowledge beyond what's in the context.";
+    // Choose system message based on IDK mode
+    const systemMessage = idkMode 
+      ? "You are a helpful assistant. Answer the user's question based ONLY on the provided context. If the context does not contain enough information to answer the question accurately, clearly state 'I don't have enough information to answer this question.' Do not infer, guess, or use external knowledge beyond what's explicitly in the context."
+      : "You are a helpful assistant. Answer the user's question based on the provided context. Use the information available to provide a useful answer, even if you need to infer from related concepts. If you cannot provide any relevant answer from the context, then say so. Do not use external knowledge beyond what's in the context.";
     const userMessage = `Context:\n${context}\n\nQuestion: ${query}`;
     
-    const response = await openai.chat.completions.create({
-      model: model,
+    const client = createAzureOpenAIClient(model);
+    
+    // Debug: Log the API version being used
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.log(`🔧 Using API version ${getApiVersion()} for RAG model ${model}`);
+    }
+    
+    const response = await client.chat.completions.create({
+      model: process.env.USE_AZURE_OPENAI === 'true' ? "" : model, // Empty string for Azure OpenAI
       messages: [
         { role: "system", content: systemMessage },
         { role: "user", content: userMessage }
@@ -220,9 +348,31 @@ app.post('/api/rag', async (req, res) => {
     
   } catch (error) {
     console.error('Error generating RAG response:', error);
+    
+    // Get model from request body for debugging (model variable is out of scope here)
+    const requestedModel = req.body.model || 'gpt-4o-mini';
+    
+    // Enhanced debugging for Azure OpenAI
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.error('=== AZURE OPENAI RAG DEBUG INFO ===');
+      console.error('Requested model:', requestedModel);
+      console.error('API version:', getApiVersion());
+      console.error('Azure endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+      
+      if (error.status === 404) {
+        console.error('❌ RAG DEPLOYMENT NOT FOUND!');
+        console.error(`Expected deployment name to exist in Azure OpenAI Studio: ${requestedModel}`);
+        console.error('Make sure deployment name in Azure matches model name exactly!');
+      }
+      console.error('=======================================');
+    }
+    
     res.status(500).json({ 
       error: 'Failed to generate RAG response',
-      details: error.message 
+      details: error.message,
+      model: requestedModel,
+      isAzure: process.env.USE_AZURE_OPENAI === 'true'
     });
   }
 });
@@ -272,8 +422,15 @@ ${text}
 Present the extracted information in a clear, organized format that would be easy for humans to read and understand.`;
     }
     
-    const response = await openai.chat.completions.create({
-      model: model,
+    const client = createAzureOpenAIClient(model);
+    
+    // Debug: Log the API version being used
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.log(`🔧 Using API version ${getApiVersion()} for extraction model ${model}`);
+    }
+    
+    const response = await client.chat.completions.create({
+      model: process.env.USE_AZURE_OPENAI === 'true' ? "" : model, // Empty string for Azure OpenAI
       messages: [
         { role: "system", content: systemMessage },
         { role: "user", content: userMessage }
@@ -304,9 +461,31 @@ Present the extracted information in a clear, organized format that would be eas
     
   } catch (error) {
     console.error('Error extracting structured data:', error);
+    
+    // Get model from request body for debugging (model variable is out of scope here)
+    const requestedModel = req.body.model || 'gpt-4o-mini';
+    
+    // Enhanced debugging for Azure OpenAI
+    if (process.env.USE_AZURE_OPENAI === 'true') {
+      console.error('=== AZURE OPENAI EXTRACTION DEBUG INFO ===');
+      console.error('Requested model:', requestedModel);
+      console.error('API version:', getApiVersion());
+      console.error('Azure endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+      
+      if (error.status === 404) {
+        console.error('❌ EXTRACTION DEPLOYMENT NOT FOUND!');
+        console.error(`Expected deployment name to exist in Azure OpenAI Studio: ${requestedModel}`);
+        console.error('Make sure deployment name in Azure matches model name exactly!');
+      }
+      console.error('============================================');
+    }
+    
     res.status(500).json({ 
       error: 'Failed to extract structured data',
-      details: error.message 
+      details: error.message,
+      model: requestedModel,
+      isAzure: process.env.USE_AZURE_OPENAI === 'true'
     });
   }
 });
@@ -329,7 +508,27 @@ function cosineSimilarity(a, b) {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔑 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Set' : 'NOT SET'}`);
+  
+  // Log OpenAI configuration
+  const isAzure = process.env.USE_AZURE_OPENAI === 'true';
+  if (isAzure) {
+    console.log(`🤖 Using Azure OpenAI`);
+    console.log(`🔑 Azure OpenAI API Key: ${process.env.AZURE_OPENAI_API_KEY ? 'Set' : 'NOT SET'}`);
+    console.log(`🌐 Azure OpenAI Endpoint: ${process.env.AZURE_OPENAI_ENDPOINT || 'NOT SET'}`);
+    console.log(`📅 Azure OpenAI API Version: ${process.env.AZURE_OPENAI_API_VERSION || '2024-02-15-preview (default)'}`);
+    
+    // List required deployments
+    console.log(`🔧 Required Azure OpenAI Deployments:`);
+    console.log(`   - text-embedding-ada-002 (for embeddings)`);
+    console.log(`   - text-embedding-3-small (for embeddings)`);  
+    console.log(`   - gpt-4o-mini (for chat completions)`);
+    console.log(`⚠️  Each deployment name must exactly match the model name above!`);
+    console.log(`🔧 Using API version: ${getApiVersion()} (latest stable)`);
+    console.log(`💡 If you get 404 DeploymentNotFound errors, check your deployment names in Azure OpenAI Studio`);
+  } else {
+    console.log(`🤖 Using OpenAI`);
+    console.log(`🔑 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Set' : 'NOT SET'}`);
+  }
   
   if (isDevelopment && !distExists) {
     console.log(`📝 Development mode: API server only`);
