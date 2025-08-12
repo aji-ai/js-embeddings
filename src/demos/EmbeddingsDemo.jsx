@@ -9,12 +9,14 @@ function EmbeddingsDemo() {
   const [stats, setStats] = useState(null);
   const [wordInput, setWordInput] = useState("Ireland, Irish, O'Connor, Dublin");
   const [queryInput, setQueryInput] = useState("inflation anxiety and pressure");
-  const [documentsInput, setDocumentsInput] = useState(`Analysts expressed worries about inflationary trends in the housing market.
-Central banks are under pressure to hike rates to curb price increases.
-Economists noted growing unease among consumers over rising costs.
-Consumer confidence rebounded unexpectedly last quarter despite mixed signals.
-Technology firms reported record profits in the latest earnings cycle.
-Surveys show rising anxiety among households as food and energy prices spike.`);
+  const [documentsList, setDocumentsList] = useState([
+    'Analysts expressed worries about inflationary trends in the housing market.',
+    'Central banks are under pressure to hike rates to curb price increases.',
+    'Economists noted growing unease among consumers over rising costs.',
+    'Consumer confidence rebounded unexpectedly last quarter despite mixed signals.',
+    'Technology firms reported record profits in the latest earnings cycle.',
+    'Surveys show rising anxiety among households as food and energy prices spike.'
+  ]);
   
   const canvasRef = useRef(null);
   const searchCanvasRef = useRef(null);
@@ -663,7 +665,7 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
 
   const performSimilaritySearch = async () => {
     const query = queryInput;
-    const documents = documentsInput.split('\n').filter(d => d.trim());
+    const documents = (documentsList || []).map(d => d.trim()).filter(Boolean);
     
     if (!query || documents.length === 0) return;
     
@@ -760,7 +762,7 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
   };
 
   const displaySearchResults = (results, query) => {
-    const documents = documentsInput.split('\n').filter(d => d.trim());
+    const documents = (documentsList || []).map(d => d.trim()).filter(Boolean);
     
     let html = `<h4>Query: "${query}"</h4><br />`;
     
@@ -785,11 +787,13 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
               <span class="result-rank">#${i + 1}</span>
               <div class="result-meta">
                 <span class="result-similarity">Similarity: ${result.similarity.toFixed(3)}</span>
-                <span class="result-doc-number">Doc ${documentNumber}</span>
               </div>
             </div>
             <div class="result-content">
-              ${result.document}
+              <div class="result-doc-card">
+                <div class="result-doc-number" style="margin-bottom: 0.5rem; display: inline-block;">Doc ${documentNumber}</div>
+                <div>${result.document}</div>
+              </div>
             </div>
           </div>
         `;
@@ -812,7 +816,7 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
           Little kitchen demo of what sits at the heart of your RAG pipeline. Inspired by <a href="https://medium.com/@arundona/open-ai-3rd-gen-embedding-models-whats-driving-the-improvements-4c23b88751f1">this Medium article</a>
         </p>
         
-        <div className="controls">
+           <div className="controls">
           <div className="input-group">
             <label htmlFor="wordInput">Enter words to visualize (comma-separated):</label>
             <input 
@@ -823,8 +827,15 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
               placeholder="Ireland, Irish, O'Connor, Dublin, pressure, worries, fears" 
             />
           </div>
-          <button onClick={visualizeWords} className="action-button">
-           Activate Centrifuge
+          <button onClick={visualizeWords} className="action-button" disabled={!!loading}>
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                Spinning...
+              </>
+            ) : (
+              'Activate Centrifuge'
+            )}
           </button>
         </div>
 
@@ -944,18 +955,43 @@ Surveys show rising anxiety among households as food and energy prices spike.`);
             />
           </div>
           
-          <div className="input-group">
-            <label htmlFor="documentsInput">Documents to search (one per line):</label>
-            <textarea 
-              id="documentsInput" 
-              rows="4" 
-              value={documentsInput}
-              onChange={(e) => setDocumentsInput(e.target.value)}
-              placeholder="Enter documents to search..."
-            />
-          </div>
-          <button onClick={performSimilaritySearch} className="action-button">
-            Search Cupboard Shelves
+            <div className="input-group">
+              <label>Documents to search (pages):</label>
+              <div className="doc-grid">
+                {documentsList.map((doc, i) => (
+                  <div key={i} className="doc-card">
+                    <div className="doc-label">Doc {i + 1}</div>
+                    <textarea
+                      className="doc-textarea"
+                      value={doc}
+                      onChange={(e) => {
+                        const next = [...documentsList]
+                        next[i] = e.target.value
+                        setDocumentsList(next)
+                      }}
+                      placeholder={`Document ${i + 1}`}
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="add-button"
+                  onClick={() => setDocumentsList(prev => [...prev, ''])}
+                  style={{ alignSelf: 'stretch' }}
+                >
+                  + Add Page
+                </button>
+              </div>
+            </div>
+          <button onClick={performSimilaritySearch} className="action-button" disabled={!!(searchResults && searchResults.loading)}>
+            {searchResults && searchResults.loading ? (
+              <>
+                <span className="spinner"></span>
+                Searching...
+              </>
+            ) : (
+              'Search Cupboard Shelves'
+            )}
           </button>
         </div>
 
