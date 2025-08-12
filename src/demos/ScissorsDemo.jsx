@@ -188,8 +188,15 @@ function ScissorsDemo() {
             />
           </div>
 
-          <button onClick={completeWithoutContext} className="action-button">
-            Use Just The 🧠 Cognition Blade
+          <button onClick={completeWithoutContext} className="action-button" disabled={loading.without}>
+            {loading.without ? (
+              <>
+                <span className="spinner"></span>
+                Thinking...
+              </>
+            ) : (
+              'Use Just The 🧠 Cognition Blade'
+            )}
           </button>
 
           {hasCompletedWithoutContext && (
@@ -238,8 +245,15 @@ function ScissorsDemo() {
         </div>
 
         {hasCompletedWithoutContext && (
-          <button onClick={demonstrateScissors} className="action-button scissors-compare">
-            Use Both Blades: 🌍 Context + 🧠 Cognition
+          <button onClick={demonstrateScissors} className="action-button scissors-compare" disabled={loading.with}>
+            {loading.with ? (
+              <>
+                <span className="spinner"></span>
+                Thinking with context...
+              </>
+            ) : (
+              'Use Both Blades: 🌍 Context + 🧠 Cognition'
+            )}
           </button>
         )}
 

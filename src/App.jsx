@@ -8,6 +8,7 @@ import ScissorsDemo from './demos/ScissorsDemo'
 import EmbeddingsDemo from './demos/EmbeddingsDemo'
 import KnowledgeUnderstandingDemo from './demos/KnowledgeUnderstandingDemo'
 import ContextSlingshotDemo from './demos/ContextSlingshotDemo'
+import StrawberryDemo from './demos/StrawberryDemo'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/embeddings" element={<EmbeddingsDemo />} />
             <Route path="/knowledge-understanding" element={<KnowledgeUnderstandingDemo />} />
             <Route path="/context-slingshot" element={<ContextSlingshotDemo />} />
+            <Route path="/strawberry" element={<StrawberryDemo />} />
           </Routes>
         </main>
         <footer className="app-footer">
@@ -39,7 +41,8 @@ function AppBar() {
     { path: '/scissors', label: 'Scissors', icon: '✂️' },
     { path: '/embeddings', label: 'Embeddings', icon: '🧑‍🍳' },
     { path: '/knowledge-understanding', label: 'Knowledge', icon: '🤔' },
-    { path: '/context-slingshot', label: 'Sponge', icon: '🧽' }
+    { path: '/context-slingshot', label: 'Sponge', icon: '🧽' },
+    { path: '/strawberry', label: 'Strawberry', icon: '🍓' }
   ]
 
   return (

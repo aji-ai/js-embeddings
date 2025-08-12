@@ -1,6 +1,8 @@
 // server.js - Node.js Express server with OpenAI integration
 import express from 'express';
 import OpenAI, { AzureOpenAI } from 'openai';
+import ModelClient from '@azure-rest/ai-inference';
+import { AzureKeyCredential } from '@azure/core-auth';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -486,6 +488,94 @@ Present the extracted information in a clear, organized format that would be eas
       details: error.message,
       model: requestedModel,
       isAzure: process.env.USE_AZURE_OPENAI === 'true'
+    });
+  }
+});
+
+// API endpoint for GitHub Models (for strawberry demo)
+app.post('/api/github-models', async (req, res) => {
+  try {
+    const { model, question, temperature = 0.3 } = req.body;
+    
+    if (!model || typeof model !== 'string') {
+      return res.status(400).json({ 
+        error: 'Model is required and must be a string' 
+      });
+    }
+    
+    if (!question || typeof question !== 'string') {
+      return res.status(400).json({ 
+        error: 'Question is required and must be a string' 
+      });
+    }
+    
+    // Check if GitHub token is available
+    if (!process.env.GITHUB_TOKEN) {
+      return res.status(500).json({ 
+        error: 'GitHub token not configured',
+        details: 'Please set GITHUB_TOKEN environment variable'
+      });
+    }
+    
+    console.log(`🔍 GitHub Models API: Running ${model} on question: ${question.substring(0, 50)}...`);
+    
+    // Initialize GitHub Models client
+    const client = ModelClient(
+      "https://models.github.ai/inference",
+      new AzureKeyCredential(process.env.GITHUB_TOKEN)
+    );
+    
+    const response = await client.path("/chat/completions").post({
+      body: {
+        messages: [
+          { role: "system", content: "You are a helpful assistant. Please answer the question accurately and concisely." },
+          { role: "user", content: question }
+        ],
+        model: model,
+        temperature: temperature,
+        max_tokens: 2048,
+        top_p: 1
+      }
+    });
+    
+    // Check if response is unexpected
+    if (response.status !== "200") {
+      console.error('GitHub Models API error:', response);
+      return res.status(500).json({
+        error: 'GitHub Models API error',
+        details: response.body?.error?.message || 'Unknown error',
+        status: response.status
+      });
+    }
+    
+    const completion = response.body.choices[0].message.content;
+    
+    console.log(`✅ GitHub Models API: ${model} responded successfully`);
+    
+    res.json({
+      response: completion,
+      model: model,
+      question: question,
+      temperature: temperature
+    });
+    
+  } catch (error) {
+    console.error('Error with GitHub Models API:', error);
+    
+    // Get model from request body for debugging
+    const requestedModel = req.body.model || 'unknown';
+    
+    console.error('=== GITHUB MODELS DEBUG INFO ===');
+    console.error('Requested model:', requestedModel);
+    console.error('GitHub token available:', !!process.env.GITHUB_TOKEN);
+    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('=================================');
+    
+    res.status(500).json({ 
+      error: 'Failed to get response from GitHub Models',
+      details: error.message,
+      model: requestedModel,
+      hasToken: !!process.env.GITHUB_TOKEN
     });
   }
 });

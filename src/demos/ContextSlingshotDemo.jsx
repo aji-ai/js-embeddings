@@ -205,8 +205,15 @@ Alex`,
           </div>
         </div>
 
-        <button onClick={demonstrateContextSlingshot} className="action-button slingshot-button">
-          Squeeze the Sponge
+        <button onClick={demonstrateContextSlingshot} className="action-button slingshot-button" disabled={loading.structured || loading.json || loading.executable}>
+          {(loading.structured || loading.json || loading.executable) ? (
+            <>
+              <span className="spinner"></span>
+              Processing...
+            </>
+          ) : (
+            'Squeeze the Sponge'
+          )}
         </button>
 
         {showResults && (

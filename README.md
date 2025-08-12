@@ -13,6 +13,7 @@ A little app that started off as a way to teach embeddings and then it became a 
 - Node.js (version 16 or higher)
 - npm or yarn
 - OpenAI API key OR Azure OpenAI resource (with appropriate model deployments)
+- GitHub Personal Access Token (for Strawberry demo - GitHub Models API)
 
 ### Installation
 
@@ -55,6 +56,20 @@ $env:AZURE_OPENAI_API_KEY="your-azure-api-key-here"
 $env:AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com"
 $env:AZURE_OPENAI_API_VERSION="2024-10-21"
 ```
+
+**For GitHub Models API (required for Strawberry demo):**
+```bash
+# On macOS/Linux:
+export GITHUB_TOKEN="your-github-personal-access-token-here"
+
+# On Windows (Command Prompt):
+set GITHUB_TOKEN=your-github-personal-access-token-here
+
+# On Windows (PowerShell):
+$env:GITHUB_TOKEN="your-github-personal-access-token-here"
+```
+
+> **Note:** To create a GitHub Personal Access Token, go to [GitHub Settings > Developer settings > Personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and create a token with appropriate permissions for the GitHub Models API.
 
 3. **Start the development environment:**
 
@@ -109,8 +124,13 @@ Start here to see an overview of all available AI recipes and demonstrations.
 
 **Similarity Search:**
 1. **Enter a search query** (e.g., "economic pressure concerns")  
-2. **Add documents** to search through (one per line)
-3. **Click "Compare Search Results"** to see ranked results with similarity scores
+2. **Add documents as pages** using the 4-wide grid of square text areas. Use **+ Add Page** to create more pages. Pages are auto-numbered (Doc 1, Doc 2, ...).
+3. **Click "Search Cupboard Shelves"** to see ranked results with similarity scores. Each result shows the matched document inside a square card (narrow page style) with the **Doc N** label at the top of the card body for easy visual matching with the grid.
+
+Recent tweaks in this demo:
+- Document entry is now a grid of editable “pages” instead of a single multiline box
+- Results visually mirror the page cards (narrow width, centered), with Doc numbers in the card body
+- Primary buttons show a spinner while processing
 
 ### ✂️ Scissors - Herbert Simon's Model
 Explore how context and cognition work together in AI completions:
@@ -131,6 +151,20 @@ Transform unstructured text into structured data:
 3. **Choose output format** (structured, JSON, or executable code)
 4. **Watch the transformation** from chaos to order
 
+### 🍓 Strawberry - Model Comparison Playground
+Compare reasoning abilities across different AI models using GitHub's hosted models:
+1. **Select models** from various providers (🇫🇷 Mistral, 🇺🇸 OpenAI, 🇺🇸 Microsoft, 🇺🇸 Meta, 🇨🇳 DeepSeek, 🇮🇱 AI21 Labs, 🇨🇦 Cohere, 🇺🇸 xAI)
+2. **Test reasoning** with character counting challenges ("How many Rs are in strawberry?")
+3. **Test cultural knowledge** with language-specific questions ("How do you make morango do amor?")
+4. **View token usage** with real-time counting using GPT-4o tokenizer format
+5. **Compare model performance** side by side with detailed analysis
+
+Recent tweaks in this demo:
+- Tokenization now uses the `@dqbd/tiktoken` browser build with per-token byte decoding for accurate text/ID display
+- Toggle between token text and IDs; leading space tokens are hidden for cleaner reading
+- Token chips use a light pastel palette with consistent black text for readability
+- Buttons use the app’s shared primary style; processing shows a spinner
+
 ## 📁 Project Structure
 
 ```
@@ -146,7 +180,8 @@ js-embeddings/
 │       ├── EmbeddingsDemo.jsx    # Word relationship visualization
 │       ├── ScissorsDemo.jsx      # Context vs cognition in AI completions
 │       ├── KnowledgeUnderstandingDemo.jsx  # RAG comparison demo
-│       └── ContextSlingshotDemo.jsx       # Structured data extraction
+│       ├── ContextSlingshotDemo.jsx       # Structured data extraction
+│       └── StrawberryDemo.jsx             # Multi-model comparison playground
 ├── public/               # Static assets and demo images
 ├── dist/                 # Built files (generated)
 ├── index.html            # HTML template
@@ -182,6 +217,9 @@ When using Azure OpenAI, you must deploy the following models in your Azure Open
 - The application creates separate client instances for each deployment using the official Azure OpenAI JavaScript library
 - Based on the [official Azure OpenAI JavaScript documentation](https://learn.microsoft.com/en-us/javascript/api/overview/azure/openai-readme?view=azure-node-latest) and [API reference](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference)
 
+**GitHub Models API (for Strawberry demo):**
+- `GITHUB_TOKEN` - Your GitHub Personal Access Token (required for GitHub Models API)
+
 **Server:**
 - `PORT` - Server port (default: 3000)
 
@@ -192,6 +230,7 @@ When using Azure OpenAI, you must deploy the following models in your Azure Open
 - `POST /api/complete` - Generate text completions (for Scissors demo)
 - `POST /api/rag` - Retrieval-Augmented Generation responses
 - `POST /api/extract-structured` - Extract structured data from unstructured text
+- `POST /api/github-models` - Query GitHub-hosted AI models (for Strawberry demo)
 
 ### Models Supported
 
@@ -213,6 +252,13 @@ When using Azure OpenAI, you must deploy the following models in your Azure Open
 - **Real-time Calculations**: Live cosine similarity scores between word pairs
 - **Search Ranking**: Compare how different models rank the same documents
 - **Cost Analysis**: 5x cost difference between models
+
+### GitHub Models Integration (Strawberry Demo)
+- **Multi-Provider Support**: Test models from 🇫🇷 Mistral, 🇺🇸 OpenAI, 🇺🇸 Microsoft, 🇺🇸 Meta, 🇨🇳 DeepSeek, 🇮🇱 AI21 Labs, 🇨🇦 Cohere, and 🇺🇸 xAI
+- **Real-time Token Visualization**: Interactive token breakdown with color-coded visualization and toggle between text/IDs
+- **Reasoning Assessment**: Character counting challenges to test model reasoning abilities
+- **Cultural Knowledge Testing**: Language-specific questions to evaluate model training diversity
+- **Performance Analytics**: Grid-based comparison with token usage breakdown and spinner indicators during processing
 
 ## 🔍 API Usage Examples
 
