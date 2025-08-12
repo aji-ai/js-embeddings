@@ -304,7 +304,7 @@ function StrawberryDemo() {
 
         {/* Reasoning Section with Token Visualization */}
         <div className="reasoning-section">
-          <h3>🔢 Reasoning Challenge with Token Visualization</h3>
+          <h3>We Don't Input Words. We Input Tokens.</h3><br />
           
           <div className="query-input">
             <input
@@ -361,7 +361,7 @@ function StrawberryDemo() {
                 Processing...
               </>
             ) : (
-              '🧠 Test Reasoning Abilities'
+              'Comparing Completion Model Outputs'
             )}
           </button>
 
@@ -405,7 +405,7 @@ function StrawberryDemo() {
 
         {/* Cultural Knowledge Section */}
         <div className="cultural-section">
-          <h3>🌍 Cultural Knowledge Challenge</h3>
+          <h3>Some Tokens Are Known. Some Are Foreign.</h3><br />
           <p className="question-text">"How do you make morango do amor?"</p>
           <p className="cultural-description">
             Testing how models handle Portuguese phrases and cultural dessert knowledge.
