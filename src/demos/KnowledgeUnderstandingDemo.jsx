@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function KnowledgeUnderstandingDemo() {
   const canvasRef = useRef(null);
   const p5InstanceRef = useRef(null);
+  const [ragLoading, setRagLoading] = useState(false);
+  const [graphLoading, setGraphLoading] = useState(false);
 
   // RAG Demo Functions
   const chunkText = (text, chunkSize) => {
@@ -445,7 +447,12 @@ function KnowledgeUnderstandingDemo() {
     
     if (runRagButton) {
       const handleClick = async () => {
-        await handleRAGDemo();
+        try {
+          setRagLoading(true);
+          await handleRAGDemo();
+        } finally {
+          setRagLoading(false);
+        }
       };
       runRagButton.addEventListener('click', handleClick);
       cleanupFunctions.push(() => runRagButton.removeEventListener('click', handleClick));
@@ -463,7 +470,12 @@ function KnowledgeUnderstandingDemo() {
     
     if (extractGraphButton) {
       const handleGraphClick = async () => {
-        await handleGraphExtraction();
+        try {
+          setGraphLoading(true);
+          await handleGraphExtraction();
+        } finally {
+          setGraphLoading(false);
+        }
       };
       extractGraphButton.addEventListener('click', handleGraphClick);
       cleanupFunctions.push(() => extractGraphButton.removeEventListener('click', handleGraphClick));
@@ -1336,7 +1348,9 @@ function KnowledgeUnderstandingDemo() {
               <label htmlFor="idk-mode">IDK Mode:</label>
               <input type="checkbox" id="idk-mode" title="When checked, AI will say 'I don't know' when information is insufficient. When unchecked, AI will try to infer and provide helpful answers." />
             </div>
-            <button id="run-rag" className="action-button">Build - A - RAG</button>
+            <button id="run-rag" className="action-button" disabled={ragLoading}>
+              {ragLoading ? (<><span className="spinner"></span> Cooking...</>) : 'Build - A - RAG'}
+            </button>
           </div>
 
           <div className="rag-steps">
@@ -1365,7 +1379,9 @@ function KnowledgeUnderstandingDemo() {
           <h4>Graph RAG Cooking</h4>
           
           <div className="graph-rag-controls">
-            <button id="extract-graph" className="action-button">Understanding &gt; Knowledge</button>
+            <button id="extract-graph" className="action-button" disabled={graphLoading}>
+              {graphLoading ? (<><span className="spinner"></span> Extracting...</>) : 'Understanding > Knowledge'}
+            </button>
           </div>
           
           <div className="graph-rag-steps">

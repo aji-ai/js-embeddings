@@ -275,14 +275,13 @@ function StrawberryDemo() {
   return (
     <div className="strawberry-demo">
       <section className="section">
-        <h2>🍓 Model Comparison Playground</h2>
+        <h2>🍓 Model Comparison via GitHub</h2>
         <p className="section-description">
-          Compare how different GitHub-hosted AI models handle reasoning tasks and cultural knowledge, 
-          with real-time token visualization using the GPT-4o tokenizer.
+          Break down tokens and compare model outputs.
         </p>
 
         <div className="model-selection">
-          <h3>Select Models to Compare:</h3>
+          <h3>Available GitHub Models</h3>
           <div className="model-grid">
             {availableModels.map(model => (
               <label key={model.id} className="model-checkbox">
@@ -320,7 +319,7 @@ function StrawberryDemo() {
           {tokenizedQuery.length > 0 && (
             <div className="token-visualization">
               <div className="token-header">
-                <h4>Token Breakdown ({tokenizedQuery.length} tokens):</h4>
+                <h4>What the model "sees" is {tokenizedQuery.length} "tokens" as INPUT ...</h4>
                 <div className="token-switch">
                   <label className="switch-label">
                     <input
@@ -361,7 +360,7 @@ function StrawberryDemo() {
                 Processing...
               </>
             ) : (
-              'Comparing Completion Model Outputs'
+              'Comparing Model Outputs'
             )}
           </button>
 
@@ -407,9 +406,6 @@ function StrawberryDemo() {
         <div className="cultural-section">
           <h3>Some Tokens Are Known. Some Are Foreign.</h3><br />
           <p className="question-text">"How do you make morango do amor?"</p>
-          <p className="cultural-description">
-            Testing how models handle Portuguese phrases and cultural dessert knowledge.
-          </p>
 
           <button 
             onClick={runCulturalComparison}
@@ -422,7 +418,7 @@ function StrawberryDemo() {
                 Processing...
               </>
             ) : (
-              '🌎 Test Cultural Knowledge'
+              'What do the AI chefs say?'
             )}
           </button>
 
@@ -458,11 +454,7 @@ function StrawberryDemo() {
         {/* Token Analysis Summary */}
         {Object.keys(tokenCounts).length > 0 && (
           <div className="token-analysis">
-            <h3>📊 Token Usage Analysis</h3>
-            <p className="analysis-note">
-              Token counts using GPT-4o tokenizer format. Different models may have different actual tokenizers, 
-              but this provides a consistent baseline for comparison.
-            </p>
+            <h3>Token Usage Analysis</h3>
             
             <div className="token-summary">
               {selectedModels.map(modelId => {

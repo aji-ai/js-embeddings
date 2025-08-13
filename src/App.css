@@ -1,3 +1,117 @@
+.clickable { cursor: pointer; }
+
+.score-value.prominent {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  min-width: 3.6rem;
+  text-align: right;
+}
+
+/* Modal styles */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #1f1f1f;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  width: min(900px, 90vw);
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-header h4 { margin: 0; color: white; }
+
+.modal-close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 6px;
+  width: 28px; height: 28px;
+  cursor: pointer;
+}
+
+.modal-body { padding: 1rem; }
+
+.vectors-scroll {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow-x: auto;
+}
+
+.vector-title {
+  color: rgba(255,255,255,0.85);
+  margin: 0.5rem 0;
+}
+
+.vector-pre {
+  white-space: nowrap;
+  color: #90CAF9;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.vector-inline {
+  white-space: nowrap;
+  color: #90CAF9;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+}
+
+/* Token chips in logprob rows */
+.token-chip {
+  color: #fff;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  min-height: 1.4rem;
+  display: flex;
+  align-items: center;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.prod-term sup {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.7em;
+  margin-left: 2px;
+}
+
+.calc-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.muted { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
 .app {
   min-height: 100vh;
   display: flex;
@@ -482,17 +596,20 @@
 
 .logprob-emitted {
   padding: 0.15rem 0.6rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 6px;
   min-width: 7rem;
   text-align: center;
+  outline: 2px solid #FFC107; /* highlight winning token */
+  outline-offset: 2px;
 }
 
 .model-label {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
   font-weight: 400;
+  margin-right: 0.5rem;
 }
 
 .score-value {
@@ -527,6 +644,103 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
+}
+
+/* Proverbs Peek */
+.proverbs-section {
+  margin: 1rem 0 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+/* Dice section */
+.dice-section {
+  margin: 1rem 0 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.dice-canvas {
+  width: 100%;
+  max-width: 680px;
+  display: block;
+  margin: 0 auto;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+}
+
+.dice-caption {
+  text-align: center;
+  color: rgba(255,255,255,0.85);
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.dice-caption strong { font-size: 1.6rem; }
+
+.proverb-stage {
+  position: relative;
+  height: 64px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  background: rgba(0,0,0,0.2);
+  overflow: hidden;
+  user-select: none;
+}
+
+.proverb-text {
+  position: absolute;
+  inset: 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 1.35rem;
+  z-index: 1;
+  pointer-events: none; /* allow handle drag without selecting text */
+}
+
+.proverb-mask {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  /* Quick feather, then fully opaque to ensure content is not readable */
+  background: linear-gradient(90deg, rgba(26,26,26,0) 0, rgba(26,26,26,0.98) 8px, rgba(26,26,26,1) 40px);
+  z-index: 2;
+  transition: width 0.05s linear;
+}
+
+.proverb-handle {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 18px;
+  margin-left: -9px; /* center on x */
+  background: rgba(255,255,255,0.15);
+  border-left: 1px solid rgba(255,255,255,0.35);
+  border-right: 1px solid rgba(255,255,255,0.35);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  z-index: 3;
+}
+
+.proverb-meta {
+  margin-top: 0.5rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.proverb-meta .proverb-translation,
+.proverb-meta .proverb-meaning {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.45);
 }
 
 .names-controls {
@@ -574,7 +788,7 @@
 
 .names-toggle {
   background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px none rgba(255,255,255,0.2);
   color: white;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -1458,6 +1672,17 @@
   color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
   line-height: 1.5;
+  font-style: italic;
+}
+.completion-result.logprob-dark {
+  background: #000 !important;
+  border-color: rgba(255,255,255,0.25);
+  outline: 2px solid #FFC107;
+  outline-offset: 2px;
+}
+
+.completion-text.logprob-text {
+  font-size: 1.15rem !important;
   font-style: italic;
 }
 
@@ -2591,14 +2816,21 @@
 
 .query-input-field {
   width: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: #000;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: white;
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 1.15rem;
   line-height: 1.5;
   font-family: inherit;
+}
+
+/* Increase specificity and force override in this section */
+.controls .query-input-field {
+  background: #000 !important;
+  color: #fff !important;
+  font-size: 1.2rem !important;
 }
 
 .query-input-field:focus {
