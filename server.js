@@ -379,6 +379,62 @@ app.post('/api/rag', async (req, res) => {
   }
 });
 
+// API endpoint for chat completion with logprobs (OpenAI only)
+app.post('/api/complete-logprobs', async (req, res) => {
+  try {
+    const {
+      prompt,
+      model = 'gpt-4o',
+      max_tokens = 32,
+      temperature = 0.7,
+      top_p = 1,
+      top_logprobs = 5
+    } = req.body;
+
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ error: 'Prompt is required and must be a string' });
+    }
+
+    // Force standard OpenAI for reliability per requirement
+    if (!openai) {
+      return res.status(500).json({
+        error: 'OpenAI client not configured',
+        details: 'Set OPENAI_API_KEY and ensure USE_AZURE_OPENAI is not true for this endpoint.'
+      });
+    }
+
+    const response = await openai.chat.completions.create({
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens,
+      temperature,
+      top_p,
+      logprobs: true,
+      top_logprobs
+    });
+
+    const choice = response.choices?.[0];
+    const content = choice?.message?.content || '';
+    const steps = choice?.logprobs?.content || [];
+
+    res.json({
+      content,
+      steps,
+      model,
+      temperature,
+      top_p,
+      max_tokens,
+      top_logprobs
+    });
+  } catch (error) {
+    console.error('Error generating completion with logprobs:', error);
+    res.status(500).json({
+      error: 'Failed to generate completion with logprobs',
+      details: error.message
+    });
+  }
+});
+
 // API endpoint for structured data extraction (for context slingshot demo)
 app.post('/api/extract-structured', async (req, res) => {
   try {

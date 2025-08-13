@@ -817,8 +817,8 @@ function EmbeddingsDemo() {
         </p>
         
            <div className="controls">
+            <h3>Visualize Word Relationships</h3>
           <div className="input-group">
-            <label htmlFor="wordInput">Enter words to visualize (comma-separated):</label>
             <input 
               type="text" 
               id="wordInput" 

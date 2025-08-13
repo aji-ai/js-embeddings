@@ -169,8 +169,9 @@ Alex`,
         <div className="demo-controls">
           <div className="input-section">
             <div className="input-group">
-              <div className="section-header">
-                <label htmlFor="unstructuredInput">Unstructured Text Input:</label>
+            <h3>Unstructured Text Input</h3>
+            <div className="section-header">
+                <label htmlFor="unstructuredInput">Input:</label>
                 <select 
                   onChange={(e) => handleExampleChange(e.target.value)}
                   className="example-selector"
@@ -190,9 +191,8 @@ Alex`,
                 className="unstructured-input"
               />
             </div>
-
+<h3>Extraction Goal</h3>
             <div className="input-group">
-              <label htmlFor="extractionPromptInput">Extraction Goal:</label>
               <input
                 type="text"
                 id="extractionPromptInput"
