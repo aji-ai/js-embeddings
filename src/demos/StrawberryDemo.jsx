@@ -17,6 +17,7 @@ function StrawberryDemo() {
   // Reusable encoder instance for the component lifecycle
   const encoderRef = useRef(null)
   const textDecoderRef = useRef(typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8') : null)
+  const audioRef = useRef(null)
 
   const loadEncoding = (model = 'gpt-4o-mini') => {
     try { return encoding_for_model(model) } catch { return get_encoding('cl100k_base') }
@@ -272,6 +273,18 @@ function StrawberryDemo() {
     return colors[provider] || '#6b7280'
   }
 
+  const playPronunciation = () => {
+    try {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+        audioRef.current.play()
+      }
+    } catch (e) {
+      console.error('Audio play failed', e)
+    }
+  }
+
   return (
     <div className="strawberry-demo">
       <section className="section">
@@ -405,7 +418,22 @@ function StrawberryDemo() {
         {/* Cultural Knowledge Section */}
         <div className="cultural-section">
           <h3>Some Tokens Are Known. Some Are Foreign.</h3><br />
-          <p className="question-text">"How do you make morango do amor?"</p>
+          <audio ref={audioRef} src="/morangodoamor.wav" preload="auto" />
+          <p className="question-text">
+            "How do you make morango do amor?"
+            <button
+              onClick={playPronunciation}
+              title="Play pronunciation of 'morango do amor'"
+              aria-label="Play pronunciation of morango do amor"
+              style={{
+                border: 'none',
+                background: 'transparent',
+                marginLeft: '0.5rem',
+                cursor: 'pointer',
+                fontSize: '1.15rem'
+              }}
+            >🔊</button>
+          </p>
 
           <button 
             onClick={runCulturalComparison}
