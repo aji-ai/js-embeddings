@@ -27,6 +27,7 @@ function EmbeddingsDemo() {
   const loadingRef = useRef(loading);
   const searchEmbeddingsRef = useRef(searchEmbeddings);
   const lastEmbeddingsRef = useRef(null);
+  const [cosineModal, setCosineModal] = useState(null); // { model, word1, word2, vec1, vec2, dot, normA, normB, similarity, prods, sigProds }
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -761,6 +762,41 @@ function EmbeddingsDemo() {
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
   };
 
+  const openCosineDetails = (modelName, word1, word2) => {
+    try {
+      const vec1 = embeddings?.[modelName]?.[word1] || [];
+      const vec2 = embeddings?.[modelName]?.[word2] || [];
+      if (!Array.isArray(vec1) || !Array.isArray(vec2) || vec1.length !== vec2.length) {
+        return;
+      }
+      let dot = 0, normA = 0, normB = 0;
+      const prods = new Array(vec1.length);
+      for (let i = 0; i < vec1.length; i++) {
+        const a = vec1[i];
+        const b = vec2[i];
+        const p = a * b;
+        prods[i] = p;
+        dot += p;
+        normA += a * a;
+        normB += b * b;
+      }
+      normA = Math.sqrt(normA);
+      normB = Math.sqrt(normB);
+      const similarity = normA === 0 || normB === 0 ? 0 : dot / (normA * normB);
+      const sigProds = [];
+      for (let i = 0; i < prods.length; i++) {
+        if (Math.abs(prods[i]) > 0.001) {
+          sigProds.push({ value: prods[i], dim: i });
+        }
+      }
+      setCosineModal({ model: modelName, word1, word2, vec1, vec2, dot, normA, normB, similarity, prods, sigProds });
+    } catch (e) {
+      console.error('Error opening cosine modal', e);
+    }
+  };
+
+  const closeCosineDetails = () => setCosineModal(null);
+
   const displaySearchResults = (results, query) => {
     const documents = (documentsList || []).map(d => d.trim()).filter(Boolean);
     
@@ -918,13 +954,13 @@ function EmbeddingsDemo() {
                         <span className="word2">{word2}</span>
                       </div>
                       <div className="similarity-scores">
-                        <div className="score ada">
-                          <span className="model-label">ada-002:</span>
-                          <span className="score-value">{sim1.toFixed(3)}</span>
+                        <div className="score ada clickable" onClick={() => openCosineDetails('text-embedding-ada-002', word1, word2)} title="View calculation">
+                          <span className="model-label">ada-002</span>
+                          <span className="score-value prominent">{sim1.toFixed(3)}</span>
                         </div>
-                        <div className="score small">
-                          <span className="model-label">3-small:</span>
-                          <span className="score-value">{sim2.toFixed(3)}</span>
+                        <div className="score small clickable" onClick={() => openCosineDetails('text-embedding-3-small', word1, word2)} title="View calculation">
+                          <span className="model-label">3-small</span>
+                          <span className="score-value prominent">{sim2.toFixed(3)}</span>
                         </div>
                       </div>
                     </div>
@@ -1008,16 +1044,47 @@ function EmbeddingsDemo() {
           </div>
         )}
 
-        {searchEmbeddings && Object.keys(searchEmbeddings).length > 0 && (
-          <div className="visualization-canvas">
-            <h3 className="canvas-title">Query-Document Relationships in Embedding Space</h3>
-            <p className="canvas-description">
-              Blue dot represents the query. Lines show similarity connections to documents.
-            </p>
-            <div ref={searchCanvasRef}></div>
-          </div>
-        )}
+        {/* Removed query-document embedding visualization per request */}
       </section>
+
+      {/* Cosine Similarity Details Modal */}
+      {cosineModal && (
+        <div className="modal-backdrop" onClick={closeCosineDetails}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h4>Cosine Similarity Details</h4>
+              <button className="modal-close" onClick={closeCosineDetails}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="vectors-scroll" style={{ marginBottom: '0.75rem' }}>
+                <div className="vector-title">Vector A — {cosineModal.word1}</div>
+                <pre className="vector-pre">{cosineModal.vec1.map(n => n.toFixed(4)).join(' ')}</pre>
+                <div className="vector-title">Vector B — {cosineModal.word2}</div>
+                <pre className="vector-pre">{cosineModal.vec2.map(n => n.toFixed(4)).join(' ')}</pre>
+              </div>
+
+              <div className="vectors-scroll" style={{ marginBottom: '0.75rem' }}>
+                <div className="vector-title">Element-wise products (A × B)</div>
+                <pre className="vector-pre">{cosineModal.prods.map(n => n.toFixed(4)).join(' + ')}</pre>
+              </div>
+
+              <div className="vectors-scroll" style={{ marginBottom: '0.75rem' }}>
+                <div className="vector-title">Significant terms (|p| &gt; 0.001)</div>
+                <div className="vector-inline">
+                  {cosineModal.sigProds.map((t, idx) => (
+                    <span key={idx} className="prod-term">{t.value.toFixed(4)}<sup>{t.dim}</sup>{idx < cosineModal.sigProds.length - 1 ? ' + ' : ''}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="calc-result">
+                <div className="score-value prominent" style={{ margin: 0 }}>{cosineModal.similarity.toFixed(6)}</div>
+                <div className="muted">Cosine similarity (dot product assuming unit-normalized vectors)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

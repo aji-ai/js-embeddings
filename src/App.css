@@ -1,3 +1,103 @@
+.clickable { cursor: pointer; }
+
+.score-value.prominent {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  min-width: 3.6rem;
+  text-align: right;
+}
+
+/* Modal styles */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #1f1f1f;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  width: min(900px, 90vw);
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-header h4 { margin: 0; color: white; }
+
+.modal-close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 6px;
+  width: 28px; height: 28px;
+  cursor: pointer;
+}
+
+.modal-body { padding: 1rem; }
+
+.vectors-scroll {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow-x: auto;
+}
+
+.vector-title {
+  color: rgba(255,255,255,0.85);
+  margin: 0.5rem 0;
+}
+
+.vector-pre {
+  white-space: nowrap;
+  color: #90CAF9;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.vector-inline {
+  white-space: nowrap;
+  color: #90CAF9;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.prod-term sup {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.7em;
+  margin-left: 2px;
+}
+
+.calc-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.muted { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
 .app {
   min-height: 100vh;
   display: flex;
@@ -493,6 +593,7 @@
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
   font-weight: 400;
+  margin-right: 0.5rem;
 }
 
 .score-value {
@@ -574,7 +675,7 @@
 
 .names-toggle {
   background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px none rgba(255,255,255,0.2);
   color: white;
   border-radius: 6px;
   font-size: 0.85rem;

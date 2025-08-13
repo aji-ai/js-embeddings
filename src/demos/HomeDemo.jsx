@@ -94,6 +94,7 @@ function HomeDemo() {
             Your browser does not support the video tag.
           </video>
         </div>
+        <h1 style = {{ margin: '0 0 3rem 0 '}}>🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳 &nbsp;L E T ' S  &nbsp; C O O K&nbsp; 🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳</h1>
         <h2>The Wiser You Are, The Better You Can Bet</h2>
         <p className="section-description">Top 25 male and female names by era. Reveal each list to peek under the curtain.</p>
         <div className="names-section">
@@ -107,13 +108,13 @@ function HomeDemo() {
 
           <div className="names-grids">
             <div className="names-era">
-              <h4 style={{ margin: '0 0 0.5rem 0' }}>1970s</h4>
+              <h3 style={{ margin: '0 0 0.5rem 0' }}>Born in the 1970s</h3>
               <div className="names-columns">
                 <div className="names-list male">
-                  <h5>Male</h5>
+                  <h4>Boy Names</h4>
                   <div className="names-toggle-row">
                     <button className="names-toggle" onClick={() => setShow1970sMale(v => !v)}>
-                      {show1970sMale ? 'Hide ⬆️' : 'Reveal ⬇️'}
+                      {show1970sMale ? 'Hide ↑' : 'Reveal ↓'}
                     </button>
                   </div>
                   {show1970sMale ? (
@@ -132,10 +133,10 @@ function HomeDemo() {
                   )}
                 </div>
                 <div className="names-list female">
-                  <h5>Female</h5>
+                  <h4>Girl Names</h4>
                   <div className="names-toggle-row">
                     <button className="names-toggle" onClick={() => setShow1970sFemale(v => !v)}>
-                      {show1970sFemale ? 'Hide ⬆️' : 'Reveal ⬇️'}
+                      {show1970sFemale ? 'Hide ↑' : 'Reveal ↓'}
                     </button>
                   </div>
                   {show1970sFemale ? (
@@ -157,13 +158,13 @@ function HomeDemo() {
             </div>
 
             <div className="names-era">
-              <h4 style={{ margin: '0 0 0.5rem 0' }}>2000s</h4>
+              <h3 style={{ margin: '0 0 0.5rem 0' }}>Born in the 2000s</h3>
               <div className="names-columns">
                 <div className="names-list male">
-                  <h5>Male</h5>
+                  <h4>Boy Names</h4>
                   <div className="names-toggle-row">
                     <button className="names-toggle" onClick={() => setShow2000sMale(v => !v)}>
-                      {show2000sMale ? 'Hide ⬆️' : 'Reveal ⬇️'}
+                      {show2000sMale ? 'Hide ↑' : 'Reveal ↓'}
                     </button>
                   </div>
                   {show2000sMale ? (
@@ -182,10 +183,10 @@ function HomeDemo() {
                   )}
                 </div>
                 <div className="names-list female">
-                  <h5>Female</h5>
+                  <h4>Girl Names</h4>
                   <div className="names-toggle-row">
                     <button className="names-toggle" onClick={() => setShow2000sFemale(v => !v)}>
-                      {show2000sFemale ? 'Hide ⬆️' : 'Reveal ⬇️'}
+                      {show2000sFemale ? 'Hide ↑' : 'Reveal ↓'}
                     </button>
                   </div>
                   {show2000sFemale ? (
@@ -223,8 +224,8 @@ function HomeDemo() {
 
 function LogprobDemo() {
   const [input, setInput] = useState('Finish this phrase as a short rhyme:\nRoses are red,');
-  const [temperature, setTemperature] = useState(0.7);
-  const [topP, setTopP] = useState(1);
+  const [temperature, setTemperature] = useState(0.1);
+  const [topP, setTopP] = useState(.1);
   const [maxTokens, setMaxTokens] = useState(16);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
