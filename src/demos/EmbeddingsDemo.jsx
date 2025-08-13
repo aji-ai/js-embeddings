@@ -860,7 +860,8 @@ function EmbeddingsDemo() {
               id="wordInput" 
               value={wordInput}
               onChange={(e) => setWordInput(e.target.value)}
-              placeholder="Ireland, Irish, O'Connor, Dublin, pressure, worries, fears" 
+              placeholder="Ireland, Irish, O'Connor, Dublin, pressure, worries, fears"
+              style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem' }} 
             />
           </div>
           <button onClick={visualizeWords} className="action-button" disabled={!!loading}>
@@ -987,7 +988,8 @@ function EmbeddingsDemo() {
               id="queryInput" 
               value={queryInput}
               onChange={(e) => setQueryInput(e.target.value)}
-              placeholder="market pressure concerns" 
+              placeholder="market pressure concerns"
+              style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem' }} 
             />
           </div>
           

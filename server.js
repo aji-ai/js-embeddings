@@ -319,8 +319,8 @@ app.post('/api/rag', async (req, res) => {
     
     // Choose system message based on IDK mode
     const systemMessage = idkMode 
-      ? "You are a helpful assistant. Answer the user's question based ONLY on the provided context. If the context does not contain enough information to answer the question accurately, clearly state 'I don't have enough information to answer this question.' Do not infer, guess, or use external knowledge beyond what's explicitly in the context."
-      : "You are a helpful assistant. Answer the user's question based on the provided context. Use the information available to provide a useful answer, even if you need to infer from related concepts. If you cannot provide any relevant answer from the context, then say so. Do not use external knowledge beyond what's in the context.";
+      ? "You are a helpful assistant. Answer the user's question based ONLY on the provided context. If the context does not contain enough information to answer the question accurately, clearly state 'I don't have enough information to answer this question.' Do not infer, guess, or use external knowledge beyond what's explicitly in the context. Keep the answer succinct (2–3 sentences)."
+      : "You are a helpful assistant. Answer the user's question based on the provided context. Use the information available to provide a useful answer, even if you need to infer from related concepts. If you cannot provide any relevant answer from the context, then say so. Do not use external knowledge beyond what's in the context. Keep the answer succinct (2–3 sentences).";
     const userMessage = `Context:\n${context}\n\nQuestion: ${query}`;
     
     const client = createAzureOpenAIClient(model);
@@ -336,7 +336,7 @@ app.post('/api/rag', async (req, res) => {
         { role: "system", content: systemMessage },
         { role: "user", content: userMessage }
       ],
-      max_tokens: 200,
+      max_tokens: 120,
       temperature: 0.3, // Lower temperature for more focused answers
     });
     

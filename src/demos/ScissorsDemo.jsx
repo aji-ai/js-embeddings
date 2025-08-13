@@ -185,6 +185,7 @@ function ScissorsDemo() {
               value={currentSentence}
               onChange={(e) => setCurrentSentence(e.target.value)}
               placeholder="Enter a sentence for the model to complete..."
+              style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem' }}
             />
           </div>
 

@@ -232,7 +232,7 @@ function KnowledgeUnderstandingDemo() {
         answerDiv.innerHTML = `
           <p><strong>Answer:</strong> ${data.answer}</p>
           <hr style="margin: 1.5rem 0; border: none; height: 1px; background: rgba(255, 255, 255, 0.2);">
-          <p><em>Generated using ${topChunks.length} chunks with similarities ranging from ${(topChunks[0]?.similarity * 100).toFixed(1)}% to ${(topChunks[topChunks.length - 1]?.similarity * 100).toFixed(1)}%</em></p>
+          <p style="font-size: 0.9rem;"><em>Generated using ${topChunks.length} chunks with similarities ranging from ${(topChunks[0]?.similarity * 100).toFixed(1)}% to ${(topChunks[topChunks.length - 1]?.similarity * 100).toFixed(1)}%</em></p>
           <details style="margin-top: 1rem; color: #999; font-size: 0.8rem;">
             <summary>Debug: Context sent to AI</summary>
             <div style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 1rem; margin-top: 0.5rem; border-radius: 4px;">
@@ -1342,7 +1342,13 @@ function KnowledgeUnderstandingDemo() {
             </div>
             <div className="rag-control-group rag-query-group">
               <label htmlFor="query-input">Query:</label>
-              <input type="text" id="rag-query" placeholder="Ask a question about the text..." />
+              <input 
+                type="text" 
+                id="rag-query" 
+                placeholder="Ask a question about the text..." 
+                defaultValue={"What's a transformative technology?"}
+                style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem' }}
+              />
             </div>
             <div className="rag-control-group">
               <label htmlFor="idk-mode">IDK Mode:</label>
@@ -1368,14 +1374,16 @@ function KnowledgeUnderstandingDemo() {
             </div>
             <div className="rag-step">
               <h4>3. Generated Answer</h4>
-              <div id="rag-answer" className="rag-answer-display">
-                <p>AI-generated answer will appear here...</p>
+              <div style={{ marginTop: '2rem', marginLeft: '1.5rem', marginRight: '1.5rem' }}>
+                <div id="rag-answer" className="rag-answer-display" style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem', outline: '2px solid yellow', padding: '4rem 5.25rem 4rem 5.25rem' }}>
+                  <p>AI-generated answer will appear here...</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="graph-rag-demo-section">
+        <div className="graph-rag-demo-section" style={{ marginTop: '1rem', marginLeft: '0.75rem', marginRight: '0.75rem' }}>
           <h4>Graph RAG Cooking</h4>
           
           <div className="graph-rag-controls">

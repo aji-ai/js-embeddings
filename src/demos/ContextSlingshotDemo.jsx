@@ -189,6 +189,7 @@ Alex`,
                 onChange={(e) => setUnstructuredText(e.target.value)}
                 placeholder="Enter unstructured text that contains information you want to extract..."
                 className="unstructured-input"
+                style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem', padding: '4rem 5.25rem 4rem 5.25rem' }}
               />
             </div>
 <h3>Extraction Goal</h3>
@@ -200,6 +201,7 @@ Alex`,
                 onChange={(e) => setExtractionPrompt(e.target.value)}
                 placeholder="Describe what information you want to extract..."
                 className="extraction-input"
+                style={{ backgroundColor: '#000', color: '#fff', fontSize: '1.1rem', padding: '1rem 1.25rem' }}
               />
             </div>
           </div>
