@@ -286,6 +286,24 @@ function HomeDemo() {
           </video>
         </div>
         <h1 style = {{ margin: '0 0 3rem 0 '}}>🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳 &nbsp;L E T ' S  &nbsp; C O O K&nbsp; 🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳🧑‍🍳</h1>
+
+        {/* Dice prediction demo */}
+        <div className="dice-section" style={{ marginTop: '5rem', marginBottom: '10rem' }}>
+          <h2>We Are Prediction Engines</h2>
+          <p className="section-description">Does anyone want to bet on a 7 or 9?</p>
+          <div className="dice-controls" style={{ marginBottom: '0.75rem' }}>
+            <button className="action-button" onClick={startDiceRoll} disabled={diceRolling}>
+              {diceRolling ? <span className="spinner" /> : null}
+              {diceRolling ? 'Shaking & Pouring…' : 'Shake & Pour'}
+            </button>
+          </div>
+          <div className="dice-canvas-wrap">
+            <canvas ref={diceCanvasRef} className="dice-canvas" width={680} height={160} />
+          </div>
+          {diceValue != null ? (
+            <div className="dice-caption">Result: <strong>{diceValue}</strong></div>
+          ) : null}
+        </div>
         <h2>The Wiser You Are, The Better You Can Bet</h2>
         <p className="section-description">Top 25 male and female names by era. Reveal each list to peek under the curtain.</p>
         <div className="names-section">
@@ -399,24 +417,8 @@ function HomeDemo() {
             </div>
           </div>
         </div>
-        {/* Dice prediction demo */}
-        <div className="dice-section" style={{ marginTop: '5rem' }}>
-          <h2>We Are Prediction Engines</h2>
-          <p className="section-description">Does anyone want to bet on a 7 or 9?</p>
-          <div className="dice-controls" style={{ marginBottom: '0.75rem' }}>
-            <button className="action-button" onClick={startDiceRoll} disabled={diceRolling}>
-              {diceRolling ? <span className="spinner" /> : null}
-              {diceRolling ? 'Shaking & Pouring…' : 'Shake & Pour'}
-            </button>
-          </div>
-          <div className="dice-canvas-wrap">
-            <canvas ref={diceCanvasRef} className="dice-canvas" width={680} height={160} />
-          </div>
-          {diceValue != null ? (
-            <div className="dice-caption">Result: <strong>{diceValue}</strong></div>
-          ) : null}
-        </div>
-        <div style={{ marginTop: '5rem' }}>
+
+        <div className="names-section" style={{ marginTop: '10rem' }}>
         {/* Proverbs Peek Section */}
         <h2>Guess The Saying</h2>
         <p className="section-description">Common knowledge comes from lived experience.</p>
