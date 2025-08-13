@@ -226,6 +226,54 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.logprob-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.logprob-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+/* Accordion styles for logprob details */
+.accordion {
+  margin-top: 1rem;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: center;
+}
+
+.accordion-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.accordion-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.accordion-body {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 1000px) {
+  .logprob-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .logprob-grid { grid-template-columns: 1fr; }
+}
+
 .embedding-vectors h3 {
   margin: 0 0 1rem 0;
   color: white;
@@ -289,6 +337,7 @@
   margin-right: 0.2rem;
   min-width: 2.5rem;
   text-align: right;
+  color: #90CAF9;
 }
 
 .vector-ellipsis {
@@ -427,6 +476,19 @@
   border-radius: 4px;
 }
 
+.logprob-header {
+  gap: 0.75rem;
+}
+
+.logprob-emitted {
+  padding: 0.15rem 0.6rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  min-width: 7rem;
+  text-align: center;
+}
+
 .model-label {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
@@ -456,6 +518,128 @@
   padding: 2rem;
   margin-bottom: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Popular Names section */
+.names-section {
+  margin: 1rem 0 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.names-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.names-controls select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.names-grids {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.names-era {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.names-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.names-list h5 {
+  margin: 0 0 0.5rem 0;
+  color: rgba(255,255,255,0.85);
+}
+
+.names-toggle-row { margin: 0.25rem 0 0.5rem 0; }
+
+.names-toggle {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.names-toggle:hover { background: rgba(255,255,255,0.15); }
+
+.names-curtain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20rem; /* match .names-scroll visual height */
+  width: 100%;
+  background: rgba(0,0,0,0.25);
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+
+.names-scroll {
+  max-height: 20rem; /* enough to show ~25 rows depending on screen */
+  overflow-y: auto;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.names-ol {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.names-ol li { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem;
+  margin: 0.15rem 0;
+}
+
+.names-rank {
+  color: rgba(255,255,255,0.7);
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.names-name { color: #ffffff; }
+.names-list.male .names-name,
+.names-name.male {
+  color: #cfe8ff; /* subtle light blue */
+}
+
+.names-list.female .names-name,
+.names-name.female {
+  color: #ffd6e7; /* subtle light pink */
+}
+
+@media (max-width: 768px) {
+  .names-grids { grid-template-columns: 1fr; }
+  .names-columns { grid-template-columns: 1fr; }
 }
 
 .stats h3,
@@ -967,7 +1151,6 @@
   color: white;
   font-size: 1.3rem;
   font-weight: 400;
-  margin: 2rem 0 1rem 0;
   letter-spacing: -0.01em;
 }
 
@@ -975,7 +1158,6 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 1rem;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
 }
 
 .recipe-list {
