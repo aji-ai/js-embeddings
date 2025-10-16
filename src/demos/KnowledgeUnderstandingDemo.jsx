@@ -1382,6 +1382,14 @@ function KnowledgeUnderstandingDemo() {
             </div>
           </div>
         </div>
+        
+        <div className="simon-quote" style={{ marginTop: '1rem' }}>
+          <blockquote>
+            Vector databases are not going away. <br />
+            Large context windows and RAG co-exist, <br />and the way they interact is actually MEMORY.<br /><br />
+          </blockquote>
+          <cite>— Garry Tan, CEO Y-Combinator</cite>
+        </div>
 
         <div className="graph-rag-demo-section" style={{ marginTop: '1rem', marginLeft: '0.75rem', marginRight: '0.75rem' }}>
           <h4>Graph RAG Cooking</h4>

@@ -679,6 +679,14 @@ Alex`,
           </div>
         )}
 
+        {/* Lilian Weng quote to introduce Agent world */}
+        <div className="einstein-quote" style={{ marginTop: '1.5rem' }}>
+          <blockquote>
+            Agent 🤖️ = LLM 💬 + memory 🧠 + planning skills 📝 + Tool use 🧰
+          </blockquote>
+          <cite>—Lilian Weng, Co-founder @ Thinking Machines Lab</cite>
+        </div>
+
         {/* === Agent Tool Picker === */}
         <div className="result-section" style={{ marginTop: '2rem' }}>
           <h3>🧰 Agent Tool Picker</h3>
