@@ -99,7 +99,7 @@ $env:GITHUB_TOKEN="your-github-personal-access-token-here"
 
 4. **Open your browser:**
    - Development: `http://localhost:5173`
-   - Production: `http://localhost:3000`
+   - Production: `http://localhost:3010`
 
 ### Available Scripts
 
@@ -221,7 +221,7 @@ When using Azure OpenAI, you must deploy the following models in your Azure Open
 - `GITHUB_TOKEN` - Your GitHub Personal Access Token (required for GitHub Models API)
 
 **Server:**
-- `PORT` - Server port (default: 3000)
+- `PORT` - Server port (default: 3010)
 
 ### API Endpoints
 
